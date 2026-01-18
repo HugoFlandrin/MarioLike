@@ -1,0 +1,43 @@
+#include "SecondMarioScene.h"
+#include "RigidBody.h"
+#include "BoxCollider.h"
+#include "TransformComponent.h"
+#include "Render.h"
+#include "MapBehavior.h"
+#include "ResourceManager.h"
+#include "PlayerBehavior.h"
+#include "MovableComponent.h"
+#include "AliveComponent.h"
+#include "EnemyBehavior.h"
+
+SecondMarioScene::SecondMarioScene() {}
+
+void SecondMarioScene::init() {
+
+    setCamera();
+
+    //Resources
+    ResourceManager* rm = new ResourceManager;
+
+    //Map
+    Entity* map = createEntity();
+    map->createComponent<MapBehavior>()->generateMap();
+    addEntity(map);
+
+    //Player
+    Entity* player = createEntity();
+
+    player->createComponent<TransformComponent>()->init({ 200.f, 200.f });
+    player->createComponent<PlayerBehavior>()->init();
+    player->createComponent<MovableComponent>()->init({ 0.f, 0.f }, 500.f);
+    player->createComponent<AliveComponent>()->init(3);
+    player->createPhysics({ 50.f, 80.f }, b2_dynamicBody, true, 10);
+
+    Render* playerRender = new Render(*rm->loadTexture("characters.png"), sf::IntRect({ 512, 516 }, { 128, 128 }), { 64, 64 + 20 });
+    player->addComponent(playerRender);
+    addEntity(player);
+}
+
+void SecondMarioScene::end() {
+
+}
