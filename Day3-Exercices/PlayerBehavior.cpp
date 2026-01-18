@@ -12,6 +12,7 @@ void PlayerBehavior::init() {
 
 void PlayerBehavior::update(float _deltaTime) {
 	MovableComponent* mc = getParent()->getComponent<MovableComponent>();
+	SceneManager* sm = SceneManager::instance();
 
 	//Set movement direction
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D)) {
@@ -28,8 +29,13 @@ void PlayerBehavior::update(float _deltaTime) {
 		mc->setDirection({ 0, 0 });
 	}
 
-	if (getParent()->getComponent<TransformComponent>()->getPosition().y > 1080) {
-		SceneManager* sm = SceneManager::instance();
+	TransformComponent* tc = getParent()->getComponent<TransformComponent>();
+
+	if (tc->getPosition().y > 1080) {
 		sm->requestChangeScene("GameOver");
+	}
+
+	if (tc->getPosition().x >= 6000) {
+		sm->requestChangeScene("SecondLevel");
 	}
 }

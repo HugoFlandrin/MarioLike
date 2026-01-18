@@ -11,33 +11,7 @@ void MapBehavior::generateMap() {
     SceneManager* sm = SceneManager::instance();
     ResourceManager* rm = ResourceManager::instance();
 
-    int tileSize = 64;
-    int mapWidth = 1920 / tileSize;         // 30 
-    int mapHeight = 1080 / tileSize + 1;    // 17
-
-    // Background
-    for (int x = 0; x < mapWidth; ++x) //0-30
-    {
-        for (int y = 0; y < mapHeight; ++y) //0-16
-        {
-            Entity* bgTile = sm->getCurrentScene()->createEntity();
-            bgTile->createComponent<TransformComponent>()->init({ float(x * tileSize * 4), + float(y * tileSize * 4) });
-
-            sf::IntRect rect({ 257, 514 }, { 256, 256 });
-
-            if (y == 0) {
-                rect.position = {257, 769};
-            }
-            else if (y == 1) {
-                rect.position = { 0, 0 };
-            }
-
-            Render* bgRender = new Render(*rm->loadTexture("backgrounds.png"), rect);
-
-            bgTile->addComponent(bgRender);
-            sm->getCurrentScene()->addEntity(bgTile);
-        }
-    }
+    generateBackground();
 
 
     float groundHeight = 770.f;
@@ -108,7 +82,122 @@ void MapBehavior::generateMap() {
 
 }
 
+void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
 
+    SceneManager* sm = SceneManager::instance();
+    AScene* scene = sm->getCurrentScene();
+
+    generateBackground();
+
+    float tileSize = 64.f;
+
+    int mapHeight = _map.size();
+    int mapWidth = (_map)[0].size();
+
+    for (int y = 0; y < mapHeight; y++)
+    {
+        int blocStartX = -1;
+        int blocCurrentType = 0;
+
+        for (int x = 0; x <= mapWidth; x++)
+        {
+            int cellValue = 0;
+
+            if (x < mapWidth)
+            {
+                cellValue = (_map)[y][x];
+            }
+
+            // Si on est dans un bloc du même type, on ne fait rien
+            if (cellValue != blocCurrentType || cellValue == 0)
+            {
+                if (blocCurrentType != 0)
+                {
+                    int blocLength = x - blocStartX;
+                    float blocWidth = blocLength * tileSize;
+                    float blocHeight = tileSize;
+
+                    float blocCenterX = blocStartX * tileSize + blocWidth / 2.f;
+                    float blocCenterY = y * tileSize + blocHeight / 2.f;
+
+                    Entity* blocEntity = scene->createEntity();
+                    blocEntity->createComponent<TransformComponent>()
+                        ->init({ blocCenterX, blocCenterY });
+
+                    const char* texturePath;
+
+                    if (blocCurrentType == 1) {
+                        texturePath = "grassTile.png";
+                    }
+                    else if (blocCurrentType == 2) {
+                        texturePath = "dirtTile.png";
+                    }
+                    else if (blocCurrentType == 3) {
+                        texturePath = "obstacleTile.png";
+                    }
+                    else
+                        texturePath = "dirtTile.png";
+
+                    ResourceManager* rm = ResourceManager::instance();
+                    sf::Texture* texture = rm->loadTexture(texturePath);
+                    texture->setRepeated(true);
+
+                    Render* blocRender = new Render(*texture, sf::IntRect({ 0, 0 }, {(int)blocWidth, (int)blocHeight}), {blocWidth / 2.f, blocHeight / 2.f});
+                    blocEntity->addComponent(blocRender);
+
+                    blocEntity->createPhysics({ blocWidth, blocHeight });
+                    scene->addEntity(blocEntity);
+                }
+
+                // Démarrage d’un nouveau bloc
+                if (cellValue != 0)
+                {
+                    blocStartX = x;
+                    blocCurrentType = cellValue;
+                }
+                else
+                {
+                    blocStartX = -1;
+                    blocCurrentType = 0;
+                }
+            }
+        }
+    }
+
+}
+
+void MapBehavior::generateBackground() {
+
+    SceneManager* sm = SceneManager::instance();
+    ResourceManager* rm = ResourceManager::instance();
+
+    int tileSize = 64;
+    int mapWidth = 1920 / tileSize;
+    int mapHeight = 1080 / tileSize + 1;
+
+    for (int x = -3; x < mapWidth; ++x) //-30
+    {
+        for (int y = -3; y < mapHeight; ++y) //0-16
+        {
+            Entity* bgTile = sm->getCurrentScene()->createEntity();
+            bgTile->createComponent<TransformComponent>()->init({ float(x * tileSize * 4), +float(y * tileSize * 4) });
+
+            sf::IntRect rect({ 257, 514 }, { 256, 256 });
+
+            if (y == 0) {
+                rect.position = { 257, 769 };
+            }
+            else if (y == 1) {
+                rect.position = { 0, 0 };
+            }
+
+            Render* bgRender = new Render(*rm->loadTexture("backgrounds.png"), rect);
+
+            bgTile->addComponent(bgRender);
+            sm->getCurrentScene()->addEntity(bgTile);
+        }
+    }
+}
 
 void MapBehavior::draw(sf::RenderTarget& _target, sf::RenderStates _states) const {
 	for (Entity* it : mapTiles) {

@@ -19,14 +19,13 @@ void AScene::removeEntity(Entity* _entity) {
 }
 
 void AScene::end() {
-    /*for (Entity* entity : *getEntities()) {
-        std::vector<AComponent*>* components = entity->getComponents();
-        for (AComponent* component : *components) {
-            delete component;
-        }
-        components->clear();
-    }
-    getEntities()->clear();*/
+    //for (Entity* entity : entities) {
+    //    delete entity;
+    //}
+
+    //entities.clear();
+    //entitiesToAdd.clear();
+    //entitiesToDelete.clear();
 }
 
 std::string AScene::getName() {
@@ -70,7 +69,7 @@ void AScene::setCamera(sf::Vector2f _center, sf::Vector2f _size) {
 void AScene::setViewFromPlayer(Entity* _player) {
     TransformComponent* playerTransform = _player->getComponent<TransformComponent>();
 
-    setCamera({ playerTransform->getPosition().x + 760.f, playerTransform->getPosition().y - 95.f });
+    setCamera({ playerTransform->getPosition().x + 500.f, playerTransform->getPosition().y - 95.f });
 }
 
 void AScene::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

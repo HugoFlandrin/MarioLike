@@ -1,8 +1,5 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(538,5): warning MSB8028: Le répertoire intermédiaire (x64\Debug\) contient des fichiers partagés provenant d'un autre projet (Day3-Exercices.vcxproj). Cela peut entraîner un comportement de nettoyage et de regénération incorrect.
-  FirstMarioScene.cpp
-  MapBehavior.cpp
-  SecondMarioScene.cpp
-  Génération de code en cours...
+  RigidBody.cpp
   Day3-Exercices.vcxproj -> C:\Users\hugof\Documents\Ynov\Cours\B3\C++\MarioLike\x64\Debug\MarioLike.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.

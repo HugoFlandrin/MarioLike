@@ -7,6 +7,14 @@
 
 Entity::Entity(int _id) : ID(_id) {}
 
+Entity::~Entity()
+{
+	for (AComponent* c : components)
+		delete c;
+
+	components.clear();
+}
+
 int Entity::getId() const {
 	return ID;
 }

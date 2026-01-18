@@ -10,6 +10,7 @@ class Entity : public sf::Drawable
 
 public:
     Entity(int _id);
+    ~Entity();
     int getId() const;
     void setId(int _id);
 

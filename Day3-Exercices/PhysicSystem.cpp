@@ -92,3 +92,19 @@ void PhysicSystem::update(float _deltaTime) {
 b2WorldId* PhysicSystem::getWorld() {
 	return &world;
 }
+
+void PhysicSystem::destroyBody(b2BodyId _body)
+{
+	if (b2Body_IsValid(_body))
+		b2DestroyBody(_body);
+}
+
+void PhysicSystem::reset() {
+	delete &world;
+
+	b2WorldDef worldDef = b2DefaultWorldDef();
+	worldDef.gravity = { 0.f, 9.8f };
+	gravity = { 0.f, 9.8f };
+	b2WorldId worldId = b2CreateWorld(&worldDef);
+	world = worldId;
+}

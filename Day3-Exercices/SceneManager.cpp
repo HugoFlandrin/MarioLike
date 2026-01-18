@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include <iostream>
+#include "Engine.h";
 
 SceneManager* SceneManager::m_instance = nullptr;
 
@@ -32,6 +33,7 @@ void SceneManager::processChangeScene() {
 	if (nextScene != nullptr) {
 
 		currentScene->end();
+		//Engine::instance()->getPhysicSystem()->reset();
 		currentScene = nextScene;
 		currentScene->init();
 		nextScene = nullptr;

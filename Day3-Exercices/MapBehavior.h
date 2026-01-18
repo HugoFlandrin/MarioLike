@@ -7,7 +7,8 @@ class MapBehavior : public AComponent
 
 public:
 	void generateMap();
-	//void newGenerateMap();
+	void newGenerateMap(std::vector<std::vector<int>> _map);
+	void generateBackground();
 
 	void update(float _deltaTime) override;
 

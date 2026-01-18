@@ -10,6 +10,8 @@ protected:
 public:
 	PhysicSystem();
 	b2WorldId* getWorld();
+	void destroyBody(b2BodyId _body);
+	void reset();
 	void update(float _deltaTime);
 	float static const worldScale;
 };

@@ -15,6 +15,10 @@ void RigidBody::init(bool _fixedRotation) {
 	body = b2CreateBody(*engine->getPhysicSystem()->getWorld(), &bodyDef);
 }
 
+//RigidBody::~RigidBody() {
+//	Engine::instance()->getPhysicSystem()->destroyBody(body);
+//}
+
 void RigidBody::setBodyType(b2BodyType _type) {
 	b2Body_SetType(body, _type);
 }
