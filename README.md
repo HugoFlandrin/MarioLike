@@ -40,7 +40,7 @@
 1. **Clone the Repository**  
    - Clone the project to your machine using a terminal:  
      ```bash
-     git clone https://github.com/fl-hugo/PokemonMonster
+     git clone https://github.com/HugoFlandrin/MarioLike
      ```  
 
 2. **Open the game**
