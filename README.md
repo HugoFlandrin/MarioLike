@@ -1,50 +1,64 @@
-# 🎮 **MarioLike**  
-**A SFML project in C++ inspired by Mario games**  
+# 🎮 **2D Game Engine**  
+**A C++ 2D game engine built with SFML and Box2D, featuring a platformer demo**
+
+---
 
 ## 📜 **Project Description**  
-**MarioLike** is an application developed in **C++** using **SFML** and **Box2d**. The goal is to create a game which contains the basic features of a platformer, like the first Mario game.
 
---- 
+This project is a custom **2D engine** developed in **C++**, using **SFML** for rendering and input handling, and **Box2D** for physics simulation.
+
+The project focuses on building a modular and extensible engine architecture capable of supporting typical 2D gameplay systems.  
+A platformer demo is included to showcase and validate the core engine systems in a concrete game scenario.
+
+---
 
 ### 🚪 **Main Features**  
 
-1. **Movements**  
-   - The player is able to move around the map. The jump doesn't work well yet, so for now, the player can also fly.
+1. **Core Engine Systems**  
+   - Game loop architecture  
+   - Scene and level management  
+   - Rendering pipeline using SFML  
+   - Physics integration through Box2D  
 
-2. **Levels**
-   - The game contains two levels. To access the second one, the player has to finish the first level by reaching the furthest point of the map. 
+2. **Entity & Gameplay Systems**  
+   - Player controller with movement and physics-based interactions  
+   - Collision handling and response  
+   - Basic enemy behavior system  
+   - Health and game state management
 
-3. **Enemies**  
-   - The player will meet an enemy in the first level. This enemy cannot be killed. The player will die if he gets hit too many times. 
+3. **Level Management**  
+   - Two playable levels  
+   - Structured map layout for platformer  
 
-4. **Timer & score**  
-   - There's no timer and no score in the game, but the features are ready to be used.  
+4. **Game State & UI Systems**  
+   - Main menu  
+   - Game over
+   - Score and timer
 
-5. **Game over system**  
-   - If the player gets hit too many times by the enemy, or if he falls, he will lose the game and get the game over menu. This menu allows him to start over (this feature doesn't work well for now).
+5. **Platformer Demo**  
+   - A playable demo inspired by classic platformer mechanics  
+   - Demonstrates movement, collisions, enemies, and level transitions  
+   - Serves as a validation layer for the engine’s core systems  
 
-6. **Menus**
-   - The game starts with a **menu** where player can begin the game or go on the settings menu (which is not ready for now)
-
----  
+---
 
 ## 🚀 **Installation and Setup**  
 
 ### **Prerequisites**  
-- **Git** (to clone the repository)
-
----  
+- **Git**  
+- A C++ compiler (Visual Studio recommended on Windows)  
+- SFML and Box2D installed  
 
 ### **Installation Steps**  
 
 1. **Clone the Repository**  
    - Clone the project to your machine using a terminal:  
      ```bash
-     git clone https://github.com/HugoFlandrin/MarioLike
+     git clone https://github.com/HugoFlandrin/2D-Game-Engine
      ```  
 
 2. **Open the game**
-   - Go on "MarioLike\x64\Debug" and open the file named **MarioLike.exe**. You're ready to play ! 🎉
+   - Go on "2D-Game-Engine\x64\Debug" and open the file named **MarioLike.exe**. You're ready to play ! 🎉
 
 ---  
 
@@ -54,18 +68,5 @@
 
 ---  
 
-## 🎯 **Future Improvements**  
-- Fix or include features that are incomplete or non-functional (The start over, timer & score, jump, settings menu).
-- Clean the first and second levels, with a different map for each, new tiles (some of which are interactive), more and distinct enemies, and a clear end of level.
-- Add some transitions between levels to inform player of his progression.
-- Add some animations in the game (for the player's movements, for enemies, when player dies, etc).
-- Add sounds and musics
-
----  
-
 ## 🧑‍💻 **Author**  
 Developed by **Flandrin Hugo** as part of a learning project at **Ynov Lyon**.  
-
----  
-
-### 🚀 **Enjoy the Game!**  
