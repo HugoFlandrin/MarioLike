@@ -121,6 +121,7 @@
     <ClCompile Include="ButtonComponent.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="HealthBarUI.cpp" />
     <ClCompile Include="ICollisionEvent.cpp" />
     <ClCompile Include="MovableComponent.cpp" />
     <ClCompile Include="PhysicSystem.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="ButtonComponent.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="HealthBarUI.h" />
     <ClInclude Include="ICollisionEvent.h" />
     <ClInclude Include="MovableComponent.h" />
     <ClInclude Include="PhysicSystem.h" />

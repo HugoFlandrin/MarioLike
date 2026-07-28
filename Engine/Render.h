@@ -12,6 +12,8 @@ public :
 
 	sf::Sprite& getSprite();
 	void setTexture(sf::Texture& _texture);
+	void setFlipX(bool _flip);
+	void setFlipY(bool _flip);
 	virtual void update(float _deltaTime) override;
 	void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 };

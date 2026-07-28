@@ -4,7 +4,9 @@
 #include "Render.h"
 #include "MovableComponent.h"
 #include "RigidBody.h"
+#include "BoxCollider.h"
 #include <iostream>
+#include <algorithm>
 
 void PlayerBehavior::init() {
 	transformComp = getParent()->getComponent<TransformComponent>();
@@ -12,20 +14,24 @@ void PlayerBehavior::init() {
 }
 
 bool PlayerBehavior::isGrounded() {
-	return groundContacts > 0;
+	return !floorContacts.empty();
 }
 
-void PlayerBehavior::beginCollision(ACollider* _me, ACollider* _other) {
+void PlayerBehavior::beginCollision(ACollider* _me, ACollider* _other, b2Vec2 _normal) {
 	RigidBody* otherBody = _other->getParent()->getComponent<RigidBody>();
-	if (otherBody && otherBody->getBodyType() == b2_staticBody) {
-		groundContacts++;
+	// _normal points from the other object toward the player: close to
+	// straight up (0,-1) means the other object is beneath our feet. A wall
+	// beside us gives a mostly-horizontal normal instead, so it won't count -
+	// this is what stops the player from jumping off a wall mid-air.
+	if (otherBody && otherBody->getBodyType() == b2_staticBody && _normal.y < -0.5f) {
+		floorContacts.push_back(_other);
 	}
 }
 
 void PlayerBehavior::endCollision(ACollider* _me, ACollider* _other) {
-	RigidBody* otherBody = _other->getParent()->getComponent<RigidBody>();
-	if (otherBody && otherBody->getBodyType() == b2_staticBody) {
-		groundContacts--;
+	auto it = std::find(floorContacts.begin(), floorContacts.end(), _other);
+	if (it != floorContacts.end()) {
+		floorContacts.erase(it);
 	}
 }
 

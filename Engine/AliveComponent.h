@@ -3,15 +3,20 @@
 
 class AliveComponent : public AComponent
 {
-	int life;
+	float hp;
+	float maxHp;
 	std::string deathScene;
 
+	sf::Clock sinceLastHit;
+	float regenDelay = 2.f;
+	float regenRate = 10.f;
+
 public:
-	int getLife();
-	void setLife(int _life);
-	void beingHit();
+	float getHp();
+	float getMaxHp();
+	float getHpRatio();
+	void takeDamage(float _amount);
 
 	virtual void update(float deltaTime) override;
-	void init(int _life, std::string _deathScene = "");
+	void init(float _maxHp, std::string _deathScene = "");
 };
-

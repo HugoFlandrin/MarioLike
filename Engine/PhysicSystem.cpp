@@ -55,11 +55,13 @@ void PhysicSystem::update(float _deltaTime) {
 			}
 		}
 		if (colliderA != nullptr && colliderB != nullptr) {
+			// manifold.normal points from shape A to shape B.
+			b2Vec2 normalAtoB = event.manifold.normal;
 			if (ICollisionEvent* t = colliderA->getParent()->getComponent<ICollisionEvent>()) {
-				t->beginCollision(colliderA, colliderB);
+				t->beginCollision(colliderA, colliderB, { -normalAtoB.x, -normalAtoB.y });
 			}
 			if (ICollisionEvent* t = colliderB->getParent()->getComponent<ICollisionEvent>()) {
-				t->beginCollision(colliderB, colliderA);
+				t->beginCollision(colliderB, colliderA, normalAtoB);
 			}
 		}
 	}

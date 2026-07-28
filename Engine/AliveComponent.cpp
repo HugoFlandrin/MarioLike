@@ -1,24 +1,36 @@
 #include "AliveComponent.h"
 #include "SceneManager.h"
+#include <algorithm>
 
-int AliveComponent::getLife() {
-	return life;
+float AliveComponent::getHp() {
+	return hp;
 }
 
-void AliveComponent::setLife(int _life) {
-	life = _life;
+float AliveComponent::getMaxHp() {
+	return maxHp;
 }
 
-void AliveComponent::beingHit() {
-	life--;
-	if (life < 0 && !deathScene.empty()) {
+float AliveComponent::getHpRatio() {
+	return maxHp > 0.f ? hp / maxHp : 0.f;
+}
+
+void AliveComponent::takeDamage(float _amount) {
+	hp -= _amount;
+	sinceLastHit.restart();
+
+	if (hp <= 0.f && !deathScene.empty()) {
 		SceneManager::instance()->requestChangeScene(deathScene);
 	}
 }
 
-void AliveComponent::update(float _deltaTime) {}
+void AliveComponent::update(float _deltaTime) {
+	if (hp < maxHp && sinceLastHit.getElapsedTime().asSeconds() > regenDelay) {
+		hp = std::min(maxHp, hp + regenRate * _deltaTime);
+	}
+}
 
-void AliveComponent::init(int _life, std::string _deathScene) {
-	life = _life;
+void AliveComponent::init(float _maxHp, std::string _deathScene) {
+	maxHp = _maxHp;
+	hp = _maxHp;
 	deathScene = _deathScene;
 }

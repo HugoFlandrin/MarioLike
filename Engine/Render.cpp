@@ -1,6 +1,7 @@
 #include "Render.h"
 #include "TransformComponent.h"
 #include "Entity.h"
+#include <cmath>
 
 Render::Render(sf::Texture& _texture, sf::IntRect _rect, sf::Vector2f _origin) : sprite(_texture) {
 	sprite.setTextureRect(_rect);
@@ -17,6 +18,16 @@ sf::Sprite& Render::getSprite() {
 
 void Render::setTexture(sf::Texture& _texture) {
 	sprite.setTexture(_texture);
+}
+
+void Render::setFlipX(bool _flip) {
+	sf::Vector2f scale = sprite.getScale();
+	sprite.setScale({ _flip ? -std::abs(scale.x) : std::abs(scale.x), scale.y });
+}
+
+void Render::setFlipY(bool _flip) {
+	sf::Vector2f scale = sprite.getScale();
+	sprite.setScale({ scale.x, _flip ? -std::abs(scale.y) : std::abs(scale.y) });
 }
 
 void Render::draw(sf::RenderTarget& _target, sf::RenderStates _states) const {

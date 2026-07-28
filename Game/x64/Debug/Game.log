@@ -1,15 +1,11 @@
-﻿  EnemyBehavior.cpp
+﻿  CoinBehavior.cpp
+  EnemyBehavior.cpp
   FirstMarioScene.cpp
-  GameOverScene.cpp
-  MapBehavior.cpp
-C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Game\MapBehavior.cpp(94,19): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Game\MapBehavior.cpp(95,18): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-  MarioLike.cpp
-  MenuScene.cpp
+  FlagBehavior.cpp
   PlayerBehavior.cpp
   ProjectileBehavior.cpp
   SecondMarioScene.cpp
-  SettingsScene.cpp
+  SpikeBehavior.cpp
   Génération de code en cours...
   Game.vcxproj -> C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\x64\Debug\MarioLike.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne

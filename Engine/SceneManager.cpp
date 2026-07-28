@@ -32,6 +32,7 @@ void SceneManager::requestChangeScene(std::string _name) {
 void SceneManager::processChangeScene() {
 	if (nextScene != nullptr) {
 
+		lastScore = currentScene->getScore();
 		currentScene->end();
 		Engine::instance()->getPhysicSystem()->reset();
 		currentScene = nextScene;
@@ -53,6 +54,18 @@ AScene* SceneManager::getCurrentScene()
 
 void SceneManager::setCurrentScene(AScene* _scene) {
 	currentScene = _scene;
+}
+
+int SceneManager::getLastScore() {
+	return lastScore;
+}
+
+void SceneManager::setLastRunWon(bool _won) {
+	lastRunWon = _won;
+}
+
+bool SceneManager::getLastRunWon() {
+	return lastRunWon;
 }
 
 SceneManager* SceneManager::instance()

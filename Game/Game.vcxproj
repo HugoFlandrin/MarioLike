@@ -146,8 +146,10 @@ xcopy /Y /D "$(SolutionDir)vcpkg_installed\x64-windows\x64-windows\bin\*.dll" "$
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CoinBehavior.cpp" />
     <ClCompile Include="EnemyBehavior.cpp" />
     <ClCompile Include="FirstMarioScene.cpp" />
+    <ClCompile Include="FlagBehavior.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="MapBehavior.cpp" />
     <ClCompile Include="MarioLike.cpp" />
@@ -156,10 +158,13 @@ xcopy /Y /D "$(SolutionDir)vcpkg_installed\x64-windows\x64-windows\bin\*.dll" "$
     <ClCompile Include="ProjectileBehavior.cpp" />
     <ClCompile Include="SecondMarioScene.cpp" />
     <ClCompile Include="SettingsScene.cpp" />
+    <ClCompile Include="SpikeBehavior.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoinBehavior.h" />
     <ClInclude Include="EnemyBehavior.h" />
     <ClInclude Include="FirstMarioScene.h" />
+    <ClInclude Include="FlagBehavior.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="MapBehavior.h" />
     <ClInclude Include="MenuScene.h" />
@@ -168,6 +173,7 @@ xcopy /Y /D "$(SolutionDir)vcpkg_installed\x64-windows\x64-windows\bin\*.dll" "$
     <ClInclude Include="resource.h" />
     <ClInclude Include="SecondMarioScene.h" />
     <ClInclude Include="SettingsScene.h" />
+    <ClInclude Include="SpikeBehavior.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MarioLike.rc" />

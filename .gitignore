@@ -33,3 +33,18 @@
 *.exe
 *.out
 *.app
+
+# Debug symbols / IDE indexes
+*.pdb
+*.idb
+*.ipdb
+*.iobj
+
+# Build output directories (binaries, intermediate files, and assets/DLLs
+# copied there by the post-build step - source of truth lives in Game/Assets)
+x64/
+Engine/x64/
+Game/x64/
+
+# Visual Studio IDE state
+.vs/

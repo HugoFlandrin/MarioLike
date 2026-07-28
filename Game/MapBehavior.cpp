@@ -5,13 +5,18 @@
 #include "AliveComponent.h"
 #include "EnemyBehavior.h"
 #include "Render.h"
+#include "SpikeBehavior.h"
+#include "RigidBody.h"
+#include "BoxCollider.h"
+#include <cmath>
+#include <algorithm>
 
 void MapBehavior::generateMap() {
 
     SceneManager* sm = SceneManager::instance();
     ResourceManager* rm = ResourceManager::instance();
 
-    generateBackground();
+    generateBackground(1920.f, 1080.f);
 
 
     float groundHeight = 770.f;
@@ -21,7 +26,6 @@ void MapBehavior::generateMap() {
     Entity* grassTile1 = sm->getCurrentScene()->createEntity();
     grassTile1->createComponent<TransformComponent>()->init({ 480.f, groundHeight - 64.f });
     
-    //sf::IntRect grassTileRect({0, 0}, {1920, 64});
     sf::IntRect grassTileRect1({ 0, 0 }, { 960, 64 });
     sf::Texture* grassTileTexture1 = rm->loadTexture("grassTile.png");
     grassTileTexture1->setRepeated(true);
@@ -87,12 +91,12 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
     SceneManager* sm = SceneManager::instance();
     AScene* scene = sm->getCurrentScene();
 
-    generateBackground();
-
     float tileSize = 64.f;
 
     int mapHeight = _map.size();
     int mapWidth = (_map)[0].size();
+
+    generateBackground(mapWidth * tileSize, mapHeight * tileSize);
 
     for (int y = 0; y < mapHeight; y++)
     {
@@ -108,7 +112,7 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
                 cellValue = (_map)[y][x];
             }
 
-            // Si on est dans un bloc du même type, on ne fait rien
+            // Si on est dans un bloc du mï¿½me type, on ne fait rien
             if (cellValue != blocCurrentType || cellValue == 0)
             {
                 if (blocCurrentType != 0)
@@ -125,6 +129,8 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
                         ->init({ blocCenterX, blocCenterY });
 
                     const char* texturePath;
+                    bool isSpike = false;
+                    bool spikeFacesDown = false;
 
                     if (blocCurrentType == 1) {
                         texturePath = "grassTile.png";
@@ -133,7 +139,20 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
                         texturePath = "dirtTile.png";
                     }
                     else if (blocCurrentType == 3) {
+                        // Plain solid obstacle: blocks movement/jumps, deals no damage.
                         texturePath = "obstacleTile.png";
+                    }
+                    else if (blocCurrentType == 4) {
+                        // Spike hazard pointing up, sitting on the ground.
+                        texturePath = "spikesTile.png";
+                        isSpike = true;
+                    }
+                    else if (blocCurrentType == 5) {
+                        // Spike hazard pointing down, meant to be placed on the
+                        // underside of a floating platform.
+                        texturePath = "spikesTile.png";
+                        isSpike = true;
+                        spikeFacesDown = true;
                     }
                     else
                         texturePath = "dirtTile.png";
@@ -143,13 +162,40 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
                     texture->setRepeated(true);
 
                     Render* blocRender = new Render(*texture, sf::IntRect({ 0, 0 }, {(int)blocWidth, (int)blocHeight}), {blocWidth / 2.f, blocHeight / 2.f});
+                    if (spikeFacesDown) {
+                        blocRender->setFlipY(true);
+                    }
                     blocEntity->addComponent(blocRender);
 
-                    blocEntity->createPhysics({ blocWidth, blocHeight });
+                    if (isSpike) {
+                        // spikesTile.png only has ~34px of actual spike art (the rest
+                        // is transparent padding above/below it depending on facing),
+                        // so the collider must be shrunk and offset to match, or the
+                        // player would visibly float above/below the drawn spikes.
+                        const float spikeVisibleHeight = 34.f;
+                        const float spikePadding = tileSize - spikeVisibleHeight;
+                        float spikeOffsetY = spikeFacesDown ? -spikePadding / 2.f : spikePadding / 2.f;
+
+                        RigidBody* rigidBody = blocEntity->createComponent<RigidBody>();
+                        rigidBody->init(true);
+                        rigidBody->setBodyType(b2_staticBody);
+
+                        BoxCollider* collider = blocEntity->createComponent<BoxCollider>();
+                        collider->setSize({ blocWidth, spikeVisibleHeight });
+                        collider->setOffset({ 0.f, spikeOffsetY });
+                        collider->init(rigidBody);
+                        collider->setDensity(0.f);
+                        collider->setFriction(0.f);
+
+                        blocEntity->createComponent<SpikeBehavior>()->init();
+                    }
+                    else {
+                        blocEntity->createPhysics({ blocWidth, blocHeight });
+                    }
                     scene->addEntity(blocEntity);
                 }
 
-                // Démarrage d’un nouveau bloc
+                // Dï¿½marrage dï¿½un nouveau bloc
                 if (cellValue != 0)
                 {
                     blocStartX = x;
@@ -166,32 +212,53 @@ void MapBehavior::newGenerateMap(std::vector<std::vector<int>> _map) {
 
 }
 
-void MapBehavior::generateBackground() {
+void MapBehavior::generateBackground(float _mapWidthPx, float _mapHeightPx) {
 
     SceneManager* sm = SceneManager::instance();
     ResourceManager* rm = ResourceManager::instance();
 
-    int tileSize = 64;
-    int mapWidth = 1920 / tileSize;
-    int mapHeight = 1080 / tileSize + 1;
+    // Background tiles are drawn from a 256x256 source rect, spaced 256px
+    // apart in world space. Bounds are derived from the actual map size
+    // (in px) plus a safety margin, so the sky/ground backdrop always
+    // covers the whole scrollable level instead of a single hardcoded
+    // screen-sized area.
+    const int tileSpacing = 256;
+    const int marginTiles = 3;
+    // Always cover well past the y > 1080 death boundary below the ground,
+    // regardless of how tall the actual tile map is.
+    const float minCoveredHeightPx = 1800.f;
 
-    for (int x = -3; x < mapWidth; ++x) //-30
+    int minX = -marginTiles;
+    int maxX = static_cast<int>(std::ceil(_mapWidthPx / tileSpacing)) + marginTiles;
+    int minY = -marginTiles;
+    int maxY = static_cast<int>(std::ceil(std::max(_mapHeightPx, minCoveredHeightPx) / tileSpacing)) + marginTiles;
+
+    for (int x = minX; x < maxX; ++x)
     {
-        for (int y = -3; y < mapHeight; ++y) //0-16
+        for (int y = minY; y < maxY; ++y)
         {
             Entity* bgTile = sm->getCurrentScene()->createEntity();
-            bgTile->createComponent<TransformComponent>()->init({ float(x * tileSize * 4), +float(y * tileSize * 4) });
+            bgTile->createComponent<TransformComponent>()->init({ float(x * tileSpacing), float(y * tileSpacing) });
 
-            sf::IntRect rect({ 257, 514 }, { 256, 256 });
+            // {257,514} is a blank white region of backgrounds.png - it must
+            // never be used as a filler. Flat sky-blue is the default for every
+            // row except the cloud/horizon strip that sits just above the ground.
+            sf::IntRect rect({ 257, 769 }, { 256, 256 });
 
-            if (y == 0) {
-                rect.position = { 257, 769 };
-            }
-            else if (y == 1) {
+            if (y == 1) {
                 rect.position = { 0, 0 };
             }
+            else if (y > 1) {
+                rect.position = { 257, 515 };
+            }
 
-            Render* bgRender = new Render(*rm->loadTexture("backgrounds.png"), rect);
+            Render* bgRender = new Render(*rm->loadTexture("backgrounds.png"), rect, { 128.f, 128.f });
+            // The camera center is a float that's essentially never pixel-aligned,
+            // so exactly-abutting tiles can show a 1px gap (the window's black
+            // clear color) between them at render time. Scaling each tile up
+            // slightly makes it overlap its neighbours by a few pixels, hiding
+            // that rounding seam.
+            bgRender->getSprite().setScale({ 1.01f, 1.01f });
 
             bgTile->addComponent(bgRender);
             sm->getCurrentScene()->addEntity(bgTile);

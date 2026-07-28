@@ -22,8 +22,8 @@ void ProjectileBehavior::update(float _deltaTime) {
 		if (it->getComponent<PlayerBehavior>() != nullptr && getParent()->getComponent<ProjectileBehavior>() != nullptr) {
 			auto globalBoundPlayer = (*it).getComponent<TransformComponent>()->getTransform().transformRect((*it).getComponent<Render>()->getSprite().getLocalBounds());
 			if (const std::optional intersection = globalBound.findIntersection(globalBoundPlayer)) {
-				it->getComponent<AliveComponent>()->beingHit();
-				if (it->getComponent<AliveComponent>()->getLife() < 0) {
+				it->getComponent<AliveComponent>()->takeDamage(1.f);
+				if (it->getComponent<AliveComponent>()->getHp() <= 0.f) {
 					sm->getCurrentScene()->removeEntity(it);
 				}
 			}

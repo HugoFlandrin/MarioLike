@@ -6,6 +6,7 @@ C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\BoxColli
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\ButtonComponent.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\ButtonComponent.obj
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\Engine.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\Engine.obj
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\Entity.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\Entity.obj
+C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\HealthBarUI.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\HealthBarUI.obj
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\ICollisionEvent.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\ICollisionEvent.obj
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\MovableComponent.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\MovableComponent.obj
 C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\PhysicSystem.cpp;C:\Users\hugof\Documents\LevelWeb Studio\Projects\2D-Game-Engine\Engine\x64\Debug\PhysicSystem.obj
